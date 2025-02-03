@@ -3,27 +3,32 @@
 
 class Solution {
     public int trap(int[] height) {
-        if(height.length < 3){
+        if(height==null||height.length < 3){
             return 0;
         }
-        int leftmaxsort[] = new int[height.length];
-        int rightmaxsort[] = new int[height.length];
-        int max = 0, sum = 0;
-        leftmaxsort[0] = height[0];
-        rightmaxsort[height.length - 1] = height[height.length - 1];
-        for(int i = 1; i < height.length; i++){
-            max = leftmaxsort[i - 1];
-            max = (height[i] > max) ? height[i] : max;
-            leftmaxsort[i] = max;
+        int left=0,right=height.length-1;
+        int lMax=0,rMax=0;
+        int water=0;
+        while(left<right){
+            if(height[left]<height[right]){
+                if(height[left]>=lMax){
+                    lMax=height[left];
+                }
+                else{
+                    water+=lMax-height[left];
+                }
+                left++;
+            }
+            else{
+                if(height[right]>=rMax){
+                    rMax=height[right];
+                }
+                else{
+                    water+=rMax-height[right];
+                }
+                right--;
+            }
         }
-        for(int i = height.length - 2; i >= 0; i--){
-            max = rightmaxsort[i + 1];
-            max = (height[i] > max) ? height[i] : max;
-            rightmaxsort[i] = max;
-        }
-        for(int i = 1; i < height.length - 1; i++){
-            sum += Math.min(leftmaxsort[i], rightmaxsort[i]) - height[i];
-        }
-        return sum;
+        return water;
     }
 }
